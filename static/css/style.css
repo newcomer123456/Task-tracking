@@ -1,27 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 .badge {
     background-color:rgb(184, 159, 148);
 }
 
-.btn-margin:hover {
-    background-color: rgb(143, 120, 111);
+.btn:hover {
+    background-color: rgb(230, 250, 250);
     color: rgb(255, 255, 255);
-    border-color: rgb(218, 205, 201);
+    border-color: rgb(190, 255, 255);
 }
 
-.btn-danger:hover {
-    background-color: rgb(143, 120, 111);
+.btn {
+    background-color: rgb(116, 204, 204);
     color: rgb(255, 255, 255);
-    border-color: rgb(218, 205, 201);
+    border-color: rgb(110, 190, 190);
 }
 
-.btn-margin {
-    background-color: rgb(75, 58, 51);
-    color: rgb(247, 240, 237);
-    border-color: rgb(75, 58, 51);
+a {
+    color: rgb(94, 196, 196);
 }
 
-.btn-danger {
-    background-color: rgb(75, 58, 51);
-    color: rgb(247, 240, 237);
-    border-color: rgb(75, 58, 51);
+h1, h2, h3 {
+    color: rgb(94, 196, 196);
+    font-family: 'Roboto', sans-serif;
 }
+
+
+
+
