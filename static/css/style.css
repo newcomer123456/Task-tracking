@@ -1,30 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Open+Sans:wght@400;600&display=swap');
 
-.badge {
-    background-color:rgb(184, 159, 148);
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f5f5f5; /* світло-сірий фон */
+    color: #333; /* темний текст */
 }
 
-.btn:hover {
-    background-color: rgb(230, 250, 250);
-    color: rgb(255, 255, 255);
-    border-color: rgb(190, 255, 255);
+.navbar {
+    background-color: #2C3E50; /* темно-синій */
+    border-bottom: 3px solid #E74C3C; /* яскраво-червоний акцент */
+}
+
+.nav-link, .navbar-brand {
+    color: #ECF0F1 !important; /* світлий текст */
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-link:hover {
+    color: #E74C3C !important; /* червоний при наведенні */
+}
+
+.badge {
+    background-color: #E74C3C; /* червоний */
+    color: #fff;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
 }
 
 .btn {
-    background-color: rgb(116, 204, 204);
-    color: rgb(255, 255, 255);
-    border-color: rgb(110, 190, 190);
+    background-color: #2C3E50; /* темно-синій */
+    color: #ECF0F1;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-a {
-    color: rgb(94, 196, 196);
+.btn:hover {
+    background-color: #E74C3C; /* червоний при наведенні */
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #2C3E50;
+}
+
+.btn-secondary {
+    background-color: #7F8C8D; /* сірий */
+}
+
+.btn-danger {
+    background-color: #E74C3C; 
 }
 
 h1, h2, h3 {
-    color: rgb(94, 196, 196);
-    font-family: 'Roboto', sans-serif;
+    color: #2C3E50; /* темно-синій */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
 }
 
+a {
+    color: #2C3E50; /* темно-синій */
+    text-decoration: none;
+    font-weight: 600;
+}
 
+a:hover {
+    color: #E74C3C; /* червоний при наведенні */
+    text-decoration: underline;
+}
 
+.form-inline {
+    display: flex;
+    align-items: center;
+}
 
+.form-inline .form-control {
+    width: auto;
+    margin-right: 10px;
+    border: 1px solid #2C3E50;
+}
+
+.list-group-item {
+    background-color: #fff;
+    border: 1px solid #2C3E50;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: #E74C3C; /* червоний при наведенні */
+    border-color: #C0392B; /* темно-червоний */
+    color: #fff;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #2C3E50;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
