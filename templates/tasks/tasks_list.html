@@ -1,38 +1,54 @@
 {% extends 'tasks/base.html' %}
 
 {% block content %}
-<div class="container mt-3">
-    <h2>Список завдань</h2>
-    <a href="{% url 'tasks:task-create' %}" class="btn btn-primary mb-3">Додати завдання</a>
+<div class="container mt-4">
+    <h2 class="mb-4">Список завдань</h2>
 
-    <br>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'tasks:task-create' %}" class="btn btn-success">Додати завдання</a>
 
-    <form method="get" class="form-inline mb-3">
-        {{ form.status.label_tag }}
-        {{ form.status }}
-        <button type="submit" class="btn btn-primary ml-2">Фільтрувати</button>
-    </form>
+        <form method="get" class="form-inline">
+            <div class="form-group">
+                {{ status_form.status.label_tag }}
+                {{ status_form.status }}
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Фільтрувати</button>
+        </form>
+
+        <form method="get" class="form-inline">
+            <div class="form-group">
+                {{ priority_form.priority.label_tag }}
+                {{ priority_form.priority }}
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Фільтрувати</button>
+        </form>
+    </div>
 
     <ul class="list-group">
         {% for task in tasks %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="card mb-3">
-            <div class="card-body">
-                <a href="{% url 'tasks:task-detail' task.pk %}">{{ task.title }}</a>
-                <span>
-                    <span class="badge badge-primary badge-pill">{{ task.status }}</span>
-                    <span class="badge badge-secondary badge-pill">{{ task.priority }}</span>
-                </span>
-            </div>
-        </div>
-        <form action="{% url 'tasks:task-complete' task.pk %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-warning btn-sm">Помітити як виконано</button>
-        </form>        
-    </li>
-{% empty %}
-    <li class="list-group-item">Завдань не знайдено</li>
-{% endfor %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>
+                        <a href="{% url 'tasks:task-detail' task.pk %}" class="text-dark">{{ task.title }}</a>
+                    </h5>
+                    <small class="text-muted">Автор: {{ task.creator }}</small>
+                </div>
+                <div class="text-right">
+                    <span class="badge badge-primary">{{ task.status }}</span>
+                    <span class="badge badge-secondary">{{ task.priority }}</span>
+                </div>
+                <div class="ml-auto">
+                    <span class="badge badge-success">Likes: {{ task.likes_count }}</span>
+                    <span class="badge badge-danger">Dislikes: {{ task.dislikes_count }}</span>
+                    <form action="{% url 'tasks:task-complete' task.pk %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning btn-sm">Помітити як виконано</button>
+                    </form>
+                </div>       
+            </li>
+        {% empty %}
+            <li class="list-group-item">Завдань не знайдено</li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}

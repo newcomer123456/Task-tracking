@@ -109,3 +109,19 @@ a:hover {
     max-width: 960px;
     margin: 0 auto;
 }
+
+.comment, .reply {
+    border: 1px solid #ddd; /* Світла рамка */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Легка світла заливка */
+}
+
+.comment-header {
+    font-weight: bold; /* Жирний шрифт */
+}
+
+.reply {
+    margin-left: 20px; /* Відступ для відповідей */
+}

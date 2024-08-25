@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Task
+from tasks.models import Task, Comment
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -14,16 +14,39 @@ class TaskForm(forms.ModelForm):
         self.fields['due_date'].widget.attrs['class'] += ' datepicker'
 
 
-class TaskFilterForm(forms.Form):
+class StatusTaskFilterForm(forms.Form):
     STATUS_CHOICES = [
         ('', 'Всі'),
-        ('todo', 'To Do'),
-        ('in_prodress', 'In Progress'),
-        ('done', 'Done'),
+        ('todo', 'В планах'),
+        ('in_prodress', 'У процесі'),
+        ('done', 'Виконано'),
     ] 
 
     status = forms.ChoiceField(choices=STATUS_CHOICES, required=False, label='Статус')
 
     def __init__(self, *args, **kwargs):
-        super(TaskFilterForm, self).__init__(*args, **kwargs)
+        super(StatusTaskFilterForm, self).__init__(*args, **kwargs)
         self.fields['status'].widget.attrs.update({'class': 'form-control'})
+
+class PriorityTaskFilterForm(forms.Form):
+    PRIORITY_CHOICES = [
+        ('', 'Всі'),
+        ('low', 'Низька'),
+        ('medium', 'Середня'),
+        ('high', 'Висока'),
+    ]
+
+    priority = forms.ChoiceField(choices=PRIORITY_CHOICES, required=False, label='Важливість')
+
+    def __init__(self, *args, **kwargs):
+        super(PriorityTaskFilterForm, self).__init__(*args, **kwargs)
+        self.fields['priority'].widget.attrs.update({'class': 'form-control'})
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content', 'parent']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3}),
+            'parent': forms.HiddenInput()
+        }
