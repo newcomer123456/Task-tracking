@@ -18,7 +18,7 @@ class StatusTaskFilterForm(forms.Form):
     STATUS_CHOICES = [
         ('', 'Всі'),
         ('todo', 'В планах'),
-        ('in_prodress', 'У процесі'),
+        ('in_progress', 'У процесі'),
         ('done', 'Виконано'),
     ] 
 
@@ -45,8 +45,17 @@ class PriorityTaskFilterForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content', 'parent']
+        fields = ['content', 'parent', 'media']
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3}),
-            'parent': forms.HiddenInput()
+            'parent': forms.HiddenInput(),
+            'media': forms.FileInput(),
         }
+
+class CommentUpdateForm(forms.ModelForm):
+    new_media = forms.FileField(required=False, label="Новий файл")
+    delete_media = forms.BooleanField(required=False, label="Видалити медіа")
+
+    class Meta:
+        model = Comment
+        fields = ['content', 'new_media', 'delete_media']

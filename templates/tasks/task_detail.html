@@ -1,8 +1,10 @@
 {% extends 'tasks/base.html' %}
 
 {% block content %}
+{% load custom_tags %}
 <div class="container mt-3">
     <h2>{{ task.title }}</h2>
+    <h4>Автор: {{ task.creator.username }}</h4>
     <p>{{ task.description }}</p>
     <p>Статус: <span>{{ task.status }}</span></p>
     <p>Пріоритет: <span>{{ task.priority }}</span></p>
@@ -19,14 +21,20 @@
     {% if user.is_authenticated %}
         <form method="post" style="display:inline;">
             {% csrf_token %}
-            <button type="submit" name="like_task" class="btn btn-success">Like</button>
-            <button type="submit" name="remove_like" class="btn btn-warning">Remove Like</button>
+            {% if has_liked %}
+                <button type="submit" name="remove_like" class="btn btn-warning">Remove Like</button>
+            {% else %}
+                <button type="submit" name="like_task" class="btn btn-success">Like</button>
+            {% endif %}
         </form>
 
         <form method="post" style="display:inline;">
             {% csrf_token %}
-            <button type="submit" name="dislike_task" class="btn btn-danger">Dislike</button>
-            <button type="submit" name="remove_dislike" class="btn btn-warning">Remove Dislike</button>
+            {% if has_disliked %}
+                <button type="submit" name="remove_dislike" class="btn btn-warning">Remove Dislike</button>
+            {% else %}
+                <button type="submit" name="dislike_task" class="btn btn-danger">Dislike</button>
+            {% endif %}
         </form>
     {% endif %}
 </div>
@@ -41,7 +49,22 @@
         {% endif %}
                 <strong class="comment-header">{{ comment.author.username }} on {{ comment.created_at }}:</strong>
                 <p>{{ comment.content }}</p>
-
+                {% if comment.media %}
+                    <div class="comment-media">
+                        {% if comment.media.url|endswith:".jpg" or comment.media.url|endswith:".png" or comment.media.url|endswith:".jpeg" %}
+                            <img src="{{comment.media.url}}" alt="Зображення коментаря" style="max-width: 850px;">
+                        {% elif comment.media.url|endswith:".mp4" %}
+                            <video width="320" height="240" controls>
+                                <source src="{{ comment.media.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% else %}
+                            <a href="{{ comment.media.url }}">Завантажити файл</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <p>Likes: {{ comment.likes_count }}</p>
+                <p>Dislikes: {{ comment.dislikes_count }}</p>
                 <button class="btn btn-link reply-link" data-comment-id="{{ comment.id }}">Відповісти</button>
 
                 {% if comment.author == user %}
@@ -49,6 +72,52 @@
                         {% csrf_token %}
                         <input type="hidden" name="comment_id" value="{{ comment.id }}">
                         <button type="submit" name="delete_comment" class="btn btn-danger btn-sm">Видалити</button>
+                    </form>
+                    <button class="btn btn-warning btn-sm update-button" data-comment-id="{{ comment.id }}">Оновити</button>
+                    <form method="post" class="update-comment-form" id="update-comment-form-{{ comment.id }}" style="display:none;" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                        <textarea name="content" class="form-control">{{ comment.content }}</textarea>
+                        
+                        <!-- Поле для завантаження нового файлу -->
+                        <div class="form-group">
+                            <label for="media-{{ comment.id }}">Додати новий файл:</label>
+                            <input type="file" name="new_media" id="media-{{ comment.id }}" class="form-control">
+                        </div>
+                    
+                        <!-- Опція видалення старого файлу, якщо він є -->
+                        {% if comment.media %}
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="delete_media"> Видалити поточний файл
+                            </label>
+                        </div>
+                        {% endif %}
+                        
+                        <button type="submit" name="update_comment" class="btn btn-success btn-sm">Підтвердити</button>
+                    </form>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        {% if comment.has_liked %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" name="remove_like_comment" class="btn btn-warning">Remove Like</button>
+                        {% else %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" name="like_comment" class="btn btn-success">Like</button>
+                        {% endif %}
+                    </form>
+
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        {% if comment.has_disliked %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" name="remove_dislike_comment" class="btn btn-warning">Remove Dislike</button>
+                        {% else %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" name="dislike_comment" class="btn btn-danger">Dislike</button>
+                        {% endif %}
                     </form>
                 {% endif %}
             </div>
@@ -70,7 +139,7 @@
 </div>
 
 <h4>Додати коментар</h4>
-<form method="post" id="comment-form">
+<form action="{% url 'tasks:task-detail' task.id %}" method="post" id="comment-form" enctype="multipart/form-data">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="hidden" name="parent" id="parent-id">
@@ -94,6 +163,16 @@
         if (parentInput.value === '') {
             parentInput.remove();
         }
+    });
+
+    // Відображення форми оновлення коментаря
+    document.querySelectorAll('.update-button').forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.getAttribute('data-comment-id');
+            const updateForm = document.getElementById(`update-comment-form-${commentId}`);
+            updateForm.style.display = updateForm.style.display === 'none' ? 'block' : 'none';
+        });
     });
 </script>
 {% endblock %}

@@ -11,12 +11,6 @@
             <div class="form-group">
                 {{ status_form.status.label_tag }}
                 {{ status_form.status }}
-            </div>
-            <button type="submit" class="btn btn-primary ml-2">Фільтрувати</button>
-        </form>
-
-        <form method="get" class="form-inline">
-            <div class="form-group">
                 {{ priority_form.priority.label_tag }}
                 {{ priority_form.priority }}
             </div>
@@ -40,6 +34,7 @@
                 <div class="ml-auto">
                     <span class="badge badge-success">Likes: {{ task.likes_count }}</span>
                     <span class="badge badge-danger">Dislikes: {{ task.dislikes_count }}</span>
+                    <span class="badge badge-success">Comments: {{ task.comments_count }}</span>
                     <form action="{% url 'tasks:task-complete' task.pk %}" method="post" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-warning btn-sm">Помітити як виконано</button>

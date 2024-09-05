@@ -30,6 +30,7 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    media = models.FileField(upload_to='comments_media', blank=True, null=True)
 
     class Meta:
         ordering = ['created_at']
